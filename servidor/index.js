@@ -18,9 +18,7 @@ const server = new ApolloServer({
                 //verificar el token del cliente
                 const usuarioActual = await jwt.verify(token, process.env.SECRETO)
                 req.usuarioActual = usuarioActual;
-                return{
-                    usuarioActual
-                }
+                return {usuarioActual}
             } catch (error) {
                 console.log(error)
             }

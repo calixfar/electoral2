@@ -32,7 +32,6 @@ export default class Cumple extends Component {
           )
     }
     tBodyTable = (data) => {
-        console.log(data)
         if(data.length > 0){
             return (
                 <tbody>
@@ -106,7 +105,6 @@ export default class Cumple extends Component {
                                         {({ loading, error, data, startPolling, stopPolling }) => {
                                             if (loading) return <Spinner />
                                             if (error) return ('Error: ' + error.message)
-                                            console.log('data', data)
                                             return (
                                                 this.tBodyTable(data.obtenerPersonasCumple)
                                             )

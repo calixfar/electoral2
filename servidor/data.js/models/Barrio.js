@@ -6,6 +6,7 @@ conectar()
 const barrioSchema = new mongoose.Schema({
     nombre: String,
     cantidadVotantes : Number,
+    metaVotos: Number,
     zona : mongoose.Types.ObjectId,
     estado : String
 });

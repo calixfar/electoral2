@@ -1,4 +1,6 @@
 import {Zona} from '../../models/Zona'
+import {Barrio} from '../../models/Barrio'
+
 import mongoose from 'mongoose'
 export const crearZona = (root, {input}) => {
     console.log(input)
@@ -22,13 +24,19 @@ return new Promise((resolve, rejects) => {
     })
 })
 }
-export const eliminarZona = (root, {id}) => {
+export const eliminarZona = async (root, {id}) => {
     console.log(id)
-    return new Promise((resolve, rejects) => {
-        Zona.findOneAndDelete({_id : id}, (error) => {
-            if (error) rejects(error)
-            else resolve('Se elimino correctamente')
-        })
+    let zona = await Zona.findById({_id: id});
+    // console.log('ziba',zona)
+    zona.barrios.map(async idBarrio => {
+        let promise = await Barrio.findByIdAndDelete({_id: id})
+        return promise;
     })
+    // return new Promise((resolve, rejects) => {
+    //     Zona.findOneAndDelete({_id : id}, (error) => {
+    //         if (error) rejects(error)
+    //         else resolve('Se elimino correctamente')
+    //     })
+    // })
 };
 

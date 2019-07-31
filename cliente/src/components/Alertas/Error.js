@@ -2,7 +2,8 @@ import React from 'react'
 
 
 export const Error = (message) => {
+    console.log('asd',message)
     return(
-        <p className="alert alert-danger text-center- p-2 mb-2">{message}</p>
+        <p style={{color: "color:#222222"}} className="alert alert-danger alert-dismissible">{message.error}</p>
     )
 }

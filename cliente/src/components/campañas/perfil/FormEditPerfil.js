@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import {Mutation, Query} from 'react-apollo'
-import { CREAR_PERSONA } from './../../../mutations'
+import { CREAR_PERSONA, ACTUALIZAR_PERSONA } from './../../../mutations'
 import { OBTENER_BARRIOS, OBTENER_PERSONAS_CAMPAÑA } from './../../../queries'
 import Select from 'react-select'
 
 export default class FormEditPerfil extends Component {
     state = {
         ...this.props.data,
-        tipoSuperior: this.props.data.superior ? this.props.data.superior.tipo : 'ninguna'
+        submit: false
     }
     updateState = (e) => {
         const { name, value } = e.target;
@@ -15,31 +15,22 @@ export default class FormEditPerfil extends Component {
             [name]: value
         })
     }
-    nuevaPersona = (e, crearPersona) => {
+    updateBarrio = (dato) => this.setState({ barrio: (dato ? dato.id : ''), valueBarrio: dato })
+    updatePersona = (e, actualizarPersona) => {
         e.preventDefault();
-        // if (this.state.barrio === '') {
-        //     alert('Por favor seleccione un barrio')
-        //     return
-        // }
-        if (this.state.tipoSuperior !== 'ninguna' && Object.keys(this.state.superior).length === 0) {
-            alert(`Por favor seleccione a que ${this.state.tipoSuperior} pertenece`)
-            return
-        }
-        const { nombre, dinero, genero, apellido, fechaCumple, estadoCivil, ocupacion, perfil
+        const { id, nombre, dinero, genero, apellido, fechaCumple, estadoCivil, ocupacion, perfil
             , cedula, celular, direccion, correo, tipo, barrio, lugarVotacion, mesaVotacion, metaVotos, estadoContacto,
-            fidelizado, superior } = this.state
+            fidelizado } = this.state
         const input = {
-            nombre, apellido, fechaCumple, estadoCivil, ocupacion, perfil
+            id, nombre, apellido, fechaCumple, estadoCivil, ocupacion, perfil
             , cedula, dinero, genero, celular, direccion, correo, tipo, barrio, lugarVotacion, mesaVotacion: Number(mesaVotacion), metaVotos: Number(metaVotos), estadoContacto,
-            fidelizado: (/true/i).test(fidelizado), superior
+            fidelizado: (/true/i).test(fidelizado)
         }
         const variables = { input }
-        console.log(input)
-        crearPersona({ variables }).then(data => {
-            this.resetState()
-            this.formRef.current.reset();
+        actualizarPersona({ variables }).then(data => {
+            this.setState({submit: true})
+            setTimeout(() => this.setState({submit: false}), 1500)
         })
-
     }
     updateRadioButton = (e) => {
         const { name, value } = e.target
@@ -103,21 +94,24 @@ export default class FormEditPerfil extends Component {
             changeFidelizado = 'fa-thumbs-o-up'
             changeBgFidelizado = 'bg-primary'
         }
-        let personaCampaña = (this.state.tipoSuperior === 'ninguna' || this.state.tipoSuperior === '') ? 'hidden' : 'visible'
-        let animateCampaña = this.state.tipoSuperior === 'ninguna' ? 'fadeOutDown' : 'fadeInUp'
+        const messageSuccess = (this.state.submit) ? <div className="col-md-10">
+            <p className="alert alert-success text-center" style={{margin: '0 auto'}}> 
+                <i style={{fontSize: '16px'}} className="fa fa-check-circle-o"></i> 
+            &nbsp;&nbsp;{this.state.nombre} actualizado con éxito</p>
+        </div> : ''
         return (
             <div className="panel-body">
                 <h5>Campos con * son obligatorios</h5>
                 <div className="row">
-                    <Mutation mutation={CREAR_PERSONA}>
-                        {crearPersona => (
+                    <Mutation mutation={ACTUALIZAR_PERSONA}>
+                        {actualizarPersona => (
                             <form
                                 className="col-md-12 d-flex"
-                                onSubmit={e => this.nuevaPersona(e, crearPersona)}
+                                onSubmit={e => this.updatePersona(e, actualizarPersona)}
                                 ref={this.formRef}
                             >
                                 <div className="row">
-
+                                    {messageSuccess}
                                     <div className="col-md-4">
                                         <div className="form-group">
                                             <label className="col-form-label">* Cedúla</label>
@@ -182,6 +176,7 @@ export default class FormEditPerfil extends Component {
                                             <select
                                                 className="form-control"
                                                 name="genero"
+                                                required
                                                 type="select"
                                                 onChange={e => this.updateState(e)}
                                                 value={this.state.genero}
@@ -215,14 +210,27 @@ export default class FormEditPerfil extends Component {
                                     <div className="col-md-4">
                                         <div className="form-group">
                                             <label className="col-form-label">Perfil</label>
-                                            <input
+                                            <select
                                                 className="form-control"
                                                 name="perfil"
-                                                placeholder="Digite la expectativa"
-                                                type="text"
                                                 onChange={e => this.updateState(e)}
                                                 value={this.state.perfil}
-                                            />
+                                            >
+                                                <option value="">Elige una opción</option>
+                                                <option value="admon">Administración de Empresas</option>
+                                                <option value="contaduria">Contaduría</option>
+                                                <option value="Economía">Economía</option>
+                                                <option value="psicología">Psicología</option>
+                                                <option value="derecho">Derecho</option>
+                                                <option value="medicina">Medicina</option>
+                                                <option value="enfermeria">Enfermeria</option>
+                                                <option value="ingmecanica">Ing Mecanica</option>
+                                                <option value="ingcivil">Ing Civil</option>
+                                                <option value="ingsistemas">Ing Sistemas</option>
+                                                <option value="ingambiental">Ing Ambiental</option>
+                                                <option value="ingagro">Ing Agro</option>
+
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
@@ -296,15 +304,22 @@ export default class FormEditPerfil extends Component {
                                                     if (error) return ('Error: ' + error.message)
 
                                                     return (
-                                                        <Select
-                                                            onFocus={() => refetch()}
-                                                            onChange={this.updateBarrio}
-                                                            name="barrio"
-                                                            options={data.obtenerBarrios}
-                                                            getOptionValue={(options) => options.id}
-                                                            getOptionLabel={(options) => options.nombre}
-                                                            value={this.state.valueBarrio}
-                                                        />
+                                                        // <Select
+                                                        //     onFocus={() => refetch()}
+                                                        //     onChange={this.updateBarrio}
+                                                        //     name="barrio"
+                                                        //     options={data.obtenerBarrios}
+                                                        //     getOptionValue={(options) => options.id}
+                                                        //     getOptionLabel={(options) => options.nombre}
+                                                        //     value={this.state.valueBarrio}
+                                                        // />
+                                                        <select name="barrio" value={this.state.barrio} className="form-control" onChange={this.updateState}>
+                                                            {data.obtenerBarrios.map(barrio => {
+                                                                return(
+                                                                    <option value={barrio.id}>{barrio.nombre}</option>
+                                                                )
+                                                            })}
+                                                        </select>
                                                     )
                                                 }}
                                             </Query>
@@ -414,7 +429,7 @@ export default class FormEditPerfil extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-md-12">
+                                    {/* <div className="col-md-12">
                                         <div className="form-group">
                                             <label>Tipo de persona</label>
                                             <div className="row">
@@ -422,8 +437,8 @@ export default class FormEditPerfil extends Component {
                                             </div>
                                         </div>
 
-                                    </div>
-                                    <div className="col-md-12">
+                                    </div> */}
+                                    {/* <div className="col-md-12">
                                         <div className="form-group">
                                             <label className="col-form-label">
                                                 ¿Pertenece a alguno de los siguientes tipos de campaña?
@@ -473,13 +488,11 @@ export default class FormEditPerfil extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="col-md-12 text-center">
-                                        <div className="col-md-6 text-center">
-                                            <button type="submit" style={{ margin: '0 auto' }} className="btn btn-primary btn-block mt-2">
-                                                Agregar
-                                            </button>
-                                        </div>
+                                        <button type="submit" style={{ margin: '0 auto' }} className="btn btn-primary btn-block mt-2">
+                                            Actualizar
+                                        </button>
                                     </div>
                                 </div>
                             </form>

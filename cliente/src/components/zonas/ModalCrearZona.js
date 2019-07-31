@@ -116,8 +116,8 @@ export default class ModalCrearZona extends Component {
                     <div className="icon2 mapa" onClick={this.showModal}>
                         <i className="fa fa-plus"></i>
                     </div>
-                    <div className="content-card-add">
-                        <h2 >Agregar programa</h2>
+                    <div className="content-card-add col-md-12">
+                        <h2 className="text-center mt-1" >Agregar Zona</h2>
                     </div>
                     <button style={{ visibility: "hidden" }} ref={this.showCrear} type="button" className="btn btn-primary" data-toggle="modal" data-target="#crearZona">
                         Launch demo modal

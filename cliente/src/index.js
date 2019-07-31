@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import {RootSession} from './App';
-import ApolloCliente, {InMemoryCache} from 'apollo-boost'
+import ApolloClient, {InMemoryCache} from 'apollo-boost'
 import {ApolloProvider} from 'react-apollo'
 import * as serviceWorker from './serviceWorker';
 
-const cliente = new ApolloCliente({
-    uri: 'http://192.168.1.167:4000/graphql',
+const cliente = new ApolloClient({
+    uri: 'http://192.168.101.12:4000/graphql',
     fetchOptions: {
       credentials: 'include'
     },

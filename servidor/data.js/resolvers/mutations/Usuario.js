@@ -9,14 +9,17 @@ const crearToken = (usuarioLogin, secreto, expiresIn) => {
     return jwt.sign({usuario},secreto,{expiresIn});
 }
 
-export const crearUsuario = async (root,{usuario,password}) => {
+export const crearUsuario = async (root,{usuario,password, nombre, rol}) => {
     const existeUsuario = await Usuario.findOne({usuario})
     if(existeUsuario){
         throw new Error('El usuario ya existe')
     }
     const nuevoUsuario = await new Usuario({
         usuario,
-        password
+        password,
+        nombre,
+        rol,
+        active: false 
     }).save()
     return 'Creado correctamente';
 }

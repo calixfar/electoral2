@@ -4,19 +4,21 @@ import { TitleContent } from '../layout/TitleContent';
 import { TableBarrio } from './TableBarrios';
 import { TopBarrios } from './TopBarrios'
 import { Query } from 'react-apollo'
-import { OBTENER_ZONA, OBTENER_BARRIOS } from './../../queries'
+import { OBTENER_ZONA, OBTENER_BARRIOS, PERSONAS_BARRIO } from './../../queries'
 import FormBarrio from './FormBarrio';
 import { Spinner } from './../utilidades/Spinner'
 
 
 export class Barrios extends Component {
-    zona = this.props.match.params.id
+    
+    zona =  this.props.match.params.id
     name = ''
     barrios = {}
     barrioEditar = {
         id: '',
         nombre: '',
         cantidadVotantes: '',
+        metaVotos: '',
         estado: '',
     }
     changeReset = true
@@ -49,7 +51,7 @@ export class Barrios extends Component {
                                         <TableBarrio reset={this.reset} cont={this.cont} editarBarrio={this.editarBarrio} zona={this.zona} barrios={this.barrios} />
                                     </div>
                                     <div className="col-md-4">
-                                        <TopBarrios />
+                                        <TopBarrios zona={this.zona} />
                                     </div>
                                 </div>
                         </Fragment>
@@ -78,6 +80,7 @@ export class Barrios extends Component {
         )
     }
     render() {
+        console.log(this.props)
         return (
             <Fragment>
                 {this.buscarName()}

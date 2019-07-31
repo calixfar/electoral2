@@ -86,7 +86,10 @@ type barrio {
     nombre: String
     cantidadVotantes: Int
     estado: String
+    metaVotos: Int
     zona: ID
+    votosFide: Int
+
 }
 type lugarVotacion {
     id: ID
@@ -107,7 +110,17 @@ type Token {
     token: String!
 }
 type Usuario  {
+    id: ID
     usuario: String
+    nombre: String
+    rol: String
+    active: Boolean
+    fecha: String
+}
+
+type PersonasBarrio {
+    totalPersonasBarrio: Int
+    totalPersonasFideBarrio: Int
 }
 enum estadoCivil {
     SOLTERO
@@ -162,6 +175,8 @@ input inputPersona {
     totalPersonas: Int
     totalFidelizados: Int
     totalGeneral : inputTotalGeneral
+    min: Int
+    max: Int
 }
 input inputTotalGeneral {
     totalGeneralLideres: inputTotalGeneralLideres,
@@ -207,6 +222,7 @@ input inputBarrio {
     id: ID
     nombre: String
     cantidadVotantes: Int
+    metaVotos: Int
     estado: String
     zona: ID
 }
@@ -255,13 +271,15 @@ type Query {
     obtenerBarrio(id: ID) : barrio
     searchIdBarrio(nombre: String) : barrio
     totalBarrios(input: inputBarrio) : Int
-    obtenerPersonas(input: inputPersona, limite: Int, offset: Int) : [Persona]
+    obtenerPersonas(input: inputPersona, limite: Int, offset: Int, filtro: Boolean) : [Persona]
     obtenerPersona(id: ID): Persona
     obtenerPersonasSuperior(input: inputQuerySuperior) : [Persona]
     obtenerPersonasCumple : [Persona]
-    totalPersonas(input: inputPersona) : Int
+    obtenerPersonasBarrio(barrio: ID) : PersonasBarrio
+    totalPersonas(input: inputPersona, all: Boolean) : Int
     validarCedula(cedula: String): [Persona]
     obtenerUsuario: Usuario
+    topBarrios(zona: ID) : [barrio]
 }
 type Mutation {
     crearZona (input : inputZona) : zona
@@ -275,8 +293,10 @@ type Mutation {
     eliminarPersona(id: String): String
     enviarSMS(input: inputSMS): String 
     registroMasivoPersonas(input: inputMasivePerson): [Persona]
-    crearUsuario(usuario: String!, password: String!): String
+    actualizarPersona(input: inputPersona) : Persona
+    crearUsuario(usuario: String!, password: String!, nombre: String!, rol: String! ): String
     autenticarUsuario(usuario: String!, password: String!): Token
+
     #lugarVotacion
     crearLugarVotacion(input: inputLugarVotacion) : lugarVotacion
 }

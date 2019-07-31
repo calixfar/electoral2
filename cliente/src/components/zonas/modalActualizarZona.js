@@ -155,7 +155,7 @@ export default class ModalActualizarPrograma extends Component {
                                 <div className="modal-footer">
                                     <ReactNotification ref={this.notificationDOMRef} />
                                     <button onClick={this.resetState} ref={this.close} type="button" className="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                                    <button disabled={this.state.error} form={`formCrearZona${this.props.id}`} type="submit" className="btn btn-primary">Agregar</button>
+                                    <button disabled={this.state.error} form={`formCrearZona${this.props.id}`} type="submit" className="btn btn-primary">Actualizar</button>
                                 </div>
                             </div>
                         </div>

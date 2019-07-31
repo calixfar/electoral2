@@ -297,9 +297,11 @@ export const Tabla = (props) => {
                         </div>
                     </div>
                     <div className="ibox-content">
-                        <table className="table table-hover">
-                            {table()}
-                        </table>
+                        <div className="table-responsive">
+                            <table className="table table-hover">
+                                {table()}
+                            </table>
+                        </div>
                         <div className="col-md-12 d-flex justify-content-center">
                             <Paginador
                                 limite={props.limite}

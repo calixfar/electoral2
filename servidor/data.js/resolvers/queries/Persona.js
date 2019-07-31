@@ -3,19 +3,55 @@ import { rejects } from 'assert';
 import mongoose from 'mongoose';
 
 
-export const obtenerPersonas = async (root, {input,limite,offset}) => {
-    let param = {tipo: input.tipo}
-    if(Object.keys(input).length > 1){
-        let property = Object.getOwnPropertyNames(input).includes('nombre') ? 'nombre' : 'cedula'
-        param[property] = {$regex: new RegExp(`^${input[property]}`)}
+export const obtenerPersonas = async (root, {input,limite,offset, filtro}) => {
+    if(filtro !== undefined){
+        if(input.totalFidelizados) {
+            input['totalGeneral.totalFidelizados'] = {$gte: input.totalFidelizados};
+            delete input['totalFidelizados']
+        }
+        if(input.min && input.max){
+            input.edad = {$gte: input.min, $lte: input.max }
+            delete input['min']
+            delete input['max']
+            return Persona.find(input)
+        }
+        if(input.min)  {
+            input.edad = {$gte: input.min}
+            delete input['min']
+        } 
+        if(input.max)  {
+            input.edad = {$lte: input.max}
+            delete input['max']
+        } 
+        return Persona.find(input)
     }
-    const personsTipo = await asyncObtenerPersonas(param,limite,offset)
-    personsTipo.total = await Persona.countDocuments(param);
-    return personsTipo;
-    // const tipo = (input && input.tipo && input.tipo != 'ninguna')? input.tipo :{$type: 2};
-    // return Persona.find({tipo}).limit(limite).skip(offset);
+    else{
+        if(Object.keys(input).length > 0){
+            let param = {tipo: input.tipo}
+            if(Object.getOwnPropertyNames(input).includes('nombre') || 
+            Object.getOwnPropertyNames(input).includes('cedula')) {
+                let property = Object.getOwnPropertyNames(input).includes('nombre') ?  'nombre' : 'cedula'
+                param[property] = {$regex: new RegExp(`^${input[property]}`)}
+            }
+            const personsTipo = await Persona.find(param).limit(limite).skip(offset)
+            personsTipo.total = await Persona.countDocuments(param);
+            console.log(personsTipo, 'asdasd')
+            return personsTipo;
+        }
+    }
 }
+export const obtenerPersonasBarrio = async (root, {barrio}) => {
+    // return new Promise( ( resolve, rejects ) => {
+    //     Persona.countDocuments({barrio}, ( error, count ) => {
+    //         if(error) rejects(error)
+    //         else resolve(count)
+    //     }) 
+    // } )
+    let totalPersonasBarrio = await Persona.countDocuments({barrio})
+    let totalPersonasFideBarrio = await Persona.countDocuments({barrio, fidelizado: true})
+    return {totalPersonasBarrio,totalPersonasFideBarrio}
 
+}
 export const obtenerPersona = (root, {id}) => {
     return new Promise((resolve,rejects) => {
         Persona.findById({_id: id}, (error, persona) => {
@@ -62,8 +98,9 @@ export const obtenerPersonasSuperior = (root, {input}) => {
     else return Persona.find({'superior.id' : input.id})
 }
 
-export const totalPersonas = (root, {input}) => {
-    let param = {tipo: input.tipo}
+export const totalPersonas = (root, {input, all}) => {
+    if(all) return Persona.countDocuments({})
+    let param = (input.tipo) ? {tipo: input.tipo} : {tipo: {$type: 7}}
     if(Object.keys(input).length > 1){
         let property = Object.getOwnPropertyNames(input).includes('nombre') ? 'nombre' : 'cedula'
         param[property] = {$regex: new RegExp(`^${input[property]}`)}

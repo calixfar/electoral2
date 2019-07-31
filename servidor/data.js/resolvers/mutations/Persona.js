@@ -49,16 +49,15 @@ export const registroFromExcel = async (root, input)  =>{
     register()
 }
 export const  enviarSMS = (root, {input}) => {
-    console.log(input)
-    let accountSid = 'AC87b053b06c2d00aecd00b859767032de'; // Your Account SID from www.twilio.com/console
-    let authToken = 'c67f5163f061e2c0900d207e8e769fbc';
+    let accountSid = 'AC05f4e20a2fd1c613909e39e37066316d'; // Your Account SID from www.twilio.com/console
+    let authToken = 'b8d6f66481f92501ad2f2c41ed47fa7f';
     var client = new twilio(accountSid, authToken);
     //let to= `+57${input.celular}`
     //console.log(to)
     client.messages.create({
         body: `${input.nombre}, el equipo de trabajo de Firme por Aguachica te desea muchas felicidades y bendiciones en tu cumpleaño número ${input.edad}, gracias por hacer parte de este proyecto.`,
         to:`+57${input.to}`,  // Text this number
-        from: '+18084007006' // From a valid Twilio number
+        from: '+18166056578' // From a valid Twilio number
     })
     .then((message) => {
         console.log(message.sid)
@@ -113,6 +112,7 @@ const personaNueva = (input) => {
                     fidelizado: input.fidelizado, 
                     tipoVoto: input.tipoVoto,
                     superior: input.superior,
+                    perfil: input.perfil,
                     macros: input.macros,
                     lideres: input.lideres ,
                     multip: input.mulip,
@@ -202,16 +202,12 @@ const crearPersona_ActualiarTotalGeneral = async (input) => {
         do{
             if(cont === 0 && superiorDirecto.superior){
                 superior = await findSuperior(mongoose.Types.ObjectId(superiorDirecto.superior.id));
-                //console.log('superior del directo', superiorDirecto)
-                //validarSuperior = superior && Object.keys(superior).length > 0 ? true : false
-                //if(validarSuperior){
-                    //Guarda valor fidelizado del 1 superior general
-                    antSuperior = superior
-                    Persona.findByIdAndUpdate({_id : superior.id}, 
-                        {
-                            $inc: queryInc2
-                        }, (error) => error ? error : true)
-                    cont++;   
+                antSuperior = superior
+                Persona.findByIdAndUpdate({_id : superior.id}, 
+                    {
+                        $inc: queryInc2
+                    }, (error) => error ? error : true)
+                cont++;   
                     //nextSuperior = superior.superior ? true : false;
                     //console.log('ant dentro del cont', antSuperior)
                 //}
@@ -263,4 +259,34 @@ const mainFindSuperior = async (id) => {
 
 export const eliminarPersona = (root,{id}) => {
     mainFindSuperior(id)
+}
+
+export const actualizarPersona = (root, {input}) => {
+    return new Promise((resolve, rejects) => {
+        Persona.findByIdAndUpdate({_id: input.id}, {
+            cedula: input.cedula,
+            nombre: input.nombre,
+            apellido: input.apellido,
+            fechaCumple: input.fechaCumple,
+            estadoCivil: input.estadoCivil,
+            ocupacion: input.ocupacion,
+            perfil: input.perfil,
+            celular: input.celular,
+            direccion: input.direccion,
+            correo: input.correo,
+            edad: calcularEdad(input.fechaCumple),
+            zona: input.zona,
+            barrio: input.barrio ? input.barrio : null, 
+            lugarVotacion: input.lugarVotacion, 
+            mesaVotacion: input.mesaVotacion, 
+            metaVotos: input.metaVotos, 
+            estadoContacto: input.estadoContacto,
+            genero: input.genero,
+            dinero: input.dinero,
+            fidelizado: input.fidelizado, 
+        }, {new: true}, (error, persona) => {
+            if(error) rejects(error)
+            else resolve(persona)
+        })
+    })
 }

@@ -6,7 +6,10 @@ conectar()
 
 const usuario = new mongoose.Schema({
     usuario: String,
-    password: String
+    password: String,
+    nombre: String,
+    rol: String,
+    active: Boolean
 })
 //hashear los passwords
 usuario.pre('save', function (next) {

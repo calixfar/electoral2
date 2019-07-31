@@ -8,6 +8,8 @@ import {withRouter} from 'react-router-dom'
 const initialState = {
     usuario: '',
     password: '',
+    nombre: '',
+    rol:'',
     repetirPassword: ''
 }
 class RegistroUsuario extends Component {
@@ -22,8 +24,8 @@ class RegistroUsuario extends Component {
         })
     }
     validarForm = () => {
-        const { usuario, password, repetirPassword } = this.state;
-        const noValido = !usuario || !password || password !== repetirPassword;
+        const { usuario, password, nombre, rol, repetirPassword } = this.state;
+        const noValido = !usuario || !password || password !== repetirPassword || !nombre || !rol;
         return noValido;
     }
     nuevoUsuario = (e,crearUsuario) => {
@@ -46,7 +48,7 @@ class RegistroUsuario extends Component {
                 <p className="alert alert-primary text-center- p-2 mb-2">{message.message}</p>
             )
         }
-        const { usuario, password, repetirPassword } = this.state;
+        const { usuario, password, repetirPassword, nombre, rol } = this.state;
         return (
             <div className="ibox">
                 <div className="ibox-title">
@@ -56,7 +58,7 @@ class RegistroUsuario extends Component {
                     <div className="row  justify-content-center">
                         <Mutation
                             mutation={CREAR_USUARIO}
-                            variables={{ usuario, password }}
+                            variables={{ usuario, password, nombre, rol }}
                         >
                             {(crearUsuario, { loading, error, data }) => {
                                 return (
@@ -75,28 +77,53 @@ class RegistroUsuario extends Component {
                                                 className="form-control"
                                                 placeholder="Nombre Usuario"
                                             />
+                                            <small className="form-text text-muted">(Sin espacios y sin caracteres especiales)</small>
                                         </div>
                                         <div className="form-group">
-                                            <label>Password</label>
+                                            <label>Nombre</label>
                                             <input
-                                                value={password}
+                                                value={nombre}
                                                 onChange={e => this.updateState(e)}
-                                                type="password"
-                                                name="password"
+                                                type="text"
+                                                name="nombre"
                                                 className="form-control"
-                                                placeholder="Password"
+                                                placeholder="Nombre completo del Usuario"
                                             />
+                                            <small className="form-text text-muted">(Agregar nombres y apellidos)</small>
+                                        </div>
+
+                                        <div className="form-row">
+                                            <div className="form-group col-md-6">
+                                                <label>Password</label>
+                                                <input
+                                                    value={password}
+                                                    onChange={e => this.updateState(e)}
+                                                    type="password"
+                                                    name="password"
+                                                    className="form-control"
+                                                    placeholder="Password"
+                                                />
+                                            </div>
+                                            <div className="form-group col-md-6">
+                                                <label>Repetir Password</label>
+                                                <input
+                                                    value={repetirPassword}
+                                                    onChange={e => this.updateState(e)}
+                                                    type="password"
+                                                    name="repetirPassword"
+                                                    className="form-control"
+                                                    placeholder="Repetir Password"
+                                                />
+                                            </div>
                                         </div>
                                         <div className="form-group">
-                                            <label>Repetir Password</label>
-                                            <input
-                                                value={repetirPassword}
-                                                onChange={e => this.updateState(e)}
-                                                type="password"
-                                                name="repetirPassword"
-                                                className="form-control"
-                                                placeholder="Repetir Password"
-                                            />
+                                            <label>Rol</label>
+                                            <select className="form-control" value={rol} name="rol" onChange={(e) => this.updateState(e)}>
+                                                <option value="">Elige una opción</option>
+                                                <option value="ADMINISTRADOR">Admin</option>
+                                                <option value="DIGITADOR">Digitador</option>
+
+                                            </select>
                                         </div>
 
                                         <button

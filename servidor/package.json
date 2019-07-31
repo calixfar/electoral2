@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js --exec babel-node -e js"
+    "dev": "nodemon ./index.js --exec babel-node -e js",
+    "start": "node ./index.js --exec babel-node -e js"
   },
   "author": "Luis Alexander Santiago",
   "license": "ISC",

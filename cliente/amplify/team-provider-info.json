@@ -1,0 +1,14 @@
+{
+    "cliente": {
+        "awscloudformation": {
+            "AuthRoleName": "electoral-cliente-20190710235626-authRole",
+            "UnauthRoleArn": "arn:aws:iam::355886873989:role/electoral-cliente-20190710235626-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::355886873989:role/electoral-cliente-20190710235626-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "electoral-cliente-20190710235626-deployment",
+            "UnauthRoleName": "electoral-cliente-20190710235626-unauthRole",
+            "StackName": "electoral-cliente-20190710235626",
+            "StackId": "arn:aws:cloudformation:us-east-1:355886873989:stack/electoral-cliente-20190710235626/3f013130-a398-11e9-a1ca-126f3d94de7e"
+        }
+    }
+}

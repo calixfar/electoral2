@@ -15,37 +15,6 @@ export const Zona = (props) => {
                 <div class="ibox-tools mr-3">
                     <div>
                         <ModalActualizarZona id={zona.id} zona={zona} zonas={array}/>
-                        <Mutation mutation={ELIMINAR_ZONA}>
-                            {eliminarZona => (
-                                <a 
-                                    onClick= { () => {
-                                        Swal.fire({
-                                            title: 'Seguro que desea eliminar esta zona?',
-                                            text: "No podrás revertir esto !",
-                                            type: 'warning',
-                                            showCancelButton: true,
-                                            confirmButtonColor: '#3085d6',
-                                            cancelButtonColor: '#d33',
-                                            confirmButtonText: 'Si'
-                                        }).then((result) => {
-                                            if (result.value) {
-                                                eliminarZona({
-                                                    variables : {id}
-                                                })
-                                                Swal.fire(
-                                                    'Eliminado!',
-                                                    'La zona ha sido eliminada.',
-                                                    'success'
-                                                )
-                                            }
-                                    })
-                                    }} 
-                                    className="config-x"
-                                >
-                                    <i className="fa fa-times" />
-                                </a>
-                            )}
-                        </Mutation>
                     </div>
 
                 </div>

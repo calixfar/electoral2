@@ -40,7 +40,14 @@ export const OBTENER_BARRIOS = gql `
             zona
             cantidadVotantes
             estado
+            metaVotos
         }
+    }
+`;
+
+export const TOTAL_BARRIOS_ZONA = gql `
+    query totalBarrios($input: inputBarrio){
+        totalBarrios(input: $input)
     }
 `;
 
@@ -119,11 +126,12 @@ export const OBTENER_PERSONAS_CAMPAÑA = gql `
     }
 `
 export const OBTENER_PERSONAS = gql `
-    query obtenerPersonas($input: inputPersona, $limite: Int, $offset: Int){
-        obtenerPersonas(input: $input, limite:$limite, offset: $offset){
+    query obtenerPersonas($input: inputPersona, $limite: Int, $offset: Int, $filtro: Boolean, $all : Boolean){
+        obtenerPersonas(input: $input, limite:$limite, offset: $offset, filtro: $filtro){
             id
             cedula
             nombre
+            edad
             apellido
             fechaCumple
             estadoCivil
@@ -181,7 +189,7 @@ export const OBTENER_PERSONAS = gql `
             }
             tipoVoto
         }
-        totalPersonas(input: $input)
+        totalPersonas(input: $input, all: $all)
     }
 `;
 export const VALIDAR_CEDULA = gql `
@@ -257,8 +265,31 @@ export const OBTENER_PERSONA = gql `
 
 export const USUARIO_ACTUAL = gql `
     query obtenerUsuario {
-        obtenerUsuario{
+        obtenerUsuario {
+            id
             usuario
+            nombre
+            rol
         }
     }
 `;
+
+export const PERSONAS_BARRIO = gql `
+    query obtenerPersonasBarrio($barrio: ID) {
+        obtenerPersonasBarrio(barrio: $barrio){
+            totalPersonasBarrio
+            totalPersonasFideBarrio
+        }
+    }
+`
+
+export const TOP_BARRIOS = gql `
+    query($zona: ID) {
+        topBarrios(zona: $zona){
+            nombre,
+            id,
+            votosFide
+            
+    }
+}
+`

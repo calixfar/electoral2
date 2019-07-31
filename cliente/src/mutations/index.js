@@ -58,6 +58,14 @@ export const CREAR_PERSONA = gql `
   }  
 }
 `;
+export const ACTUALIZAR_PERSONA = gql `
+    mutation actualizarPersona($input: inputPersona){
+        actualizarPersona(input: $input){
+            id
+            nombre
+        }
+}
+`;
 export const ENVIAR_SMS = gql `
     mutation enviarSms($input: inputSMS){
         enviarSMS(input: $input)
@@ -73,8 +81,8 @@ export const CREAR_PERSONA_MASIVO = gql `
 `
 
 export const CREAR_USUARIO = gql `
-    mutation crearUsuario($usuario: String!, $password: String!){
-        crearUsuario(usuario: $usuario, password: $password)
+    mutation crearUsuario($usuario: String!, $password: String!, $nombre: String!, $rol: String!){
+        crearUsuario(usuario: $usuario, password: $password, nombre: $nombre, rol: $rol)
     }
 `;
 

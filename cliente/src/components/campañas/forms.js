@@ -73,7 +73,10 @@ export default class FormMacro extends Component {
 
     }
     resetState = () => this.setState({ ...initialState });
-    updateBarrio = (dato) => this.setState({ barrio: (dato ? dato.id : ''), valueBarrio: dato })
+    updateBarrio = (dato) => {
+        console.log(dato)
+        this.setState({ barrio: (dato ? dato.id : ''), valueBarrio: dato })
+    }
     updateSuperior = (dato) => this.setState({ superior: dato })
     updateRadioButton = (e) => {
         const { name, value } = e.target
@@ -262,14 +265,35 @@ export default class FormMacro extends Component {
                                                 <div className="col-md-3">
                                                     <div className="form-group">
                                                         <label className="col-form-label">Perfil</label>
-                                                        <input
+                                                        <select
+                                                            className="form-control"
+                                                            name="perfil"
+                                                            onChange={e => this.updateState(e)}
+                                                            value={this.state.perfil}
+                                                        >
+                                                            <option value="">Elige una opción</option>
+                                                            <option value="admon">Administración de Empresas</option>
+                                                            <option value="contaduria">Contaduría</option>
+                                                            <option value="Economía">Economía</option>
+                                                            <option value="psicología">Psicología</option>
+                                                            <option value="derecho">Derecho</option>
+                                                            <option value="medicina">Medicina</option>
+                                                            <option value="enfermeria">Enfermeria</option>
+                                                            <option value="ingmecanica">Ing Mecanica</option>
+                                                            <option value="ingcivil">Ing Civil</option>
+                                                            <option value="ingsistemas">Ing Sistemas</option>
+                                                            <option value="ingambiental">Ing Ambiental</option>
+                                                            <option value="ingagro">Ing Agro</option>
+
+                                                        </select>
+                                                        {/* <input
                                                             className="form-control"
                                                             name="perfil"
                                                             placeholder="Digite la expectativa"
                                                             type="text"
                                                             onChange={e => this.updateState(e)}
                                                             value={this.state.perfil}
-                                                        />
+                                                        /> */}
                                                     </div>
                                                 </div>
                                                 <div className="col-md-3">

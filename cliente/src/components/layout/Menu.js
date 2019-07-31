@@ -1,7 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
+import { userInfo } from 'os';
 
-export const Menu = () => {
+export const Menu = (props) => {
+    console.log(props)
+    let [ariaZona, setAriaZona] = useState(false)
+    let [ariaCampaña, setAriaCampaña] = useState(false)
+
     return (
         <nav className="navbar-default navbar-static-side" role="navigation">
             <div className="sidebar-collapse">
@@ -10,8 +15,8 @@ export const Menu = () => {
                         <div className="dropdown profile-element">
                             <img alt="image" className="rounded-circle" src="img/profile_small.jpg" />
                             <a data-toggle="dropdown" className="dropdown-toggle" href="#">
-                                <span className="block m-t-xs font-bold">David Williams</span>
-                                <span className="text-muted text-xs block">Art Director <b className="caret" /></span>
+                                <span className="block m-t-xs font-bold">{props.user.nombre}</span>
+                                <span className="text-muted text-xs block"> {props.user.rol} <b className="caret" /></span>
                             </a>
                             <ul className="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a className="dropdown-item" href="profile.html">Perfil</a></li>
@@ -27,24 +32,27 @@ export const Menu = () => {
                     <li className="">
                         <Link to="/"><i className="fa fa-th-large" /> <span className="nav-label">Dashboards</span></Link>
                     </li> 
-                    <li>
-                        <a href="" className="nav-label"><i className="fa fa-envelope"/> <span >Zonas</span><span className="fa arrow"/></a>
-                        <ul className="nav nav-second-level collapse">
+                    <li className={`${ariaZona ? 'active' : ''}`}>
+                        <a aria-expanded={ariaZona} onClick={(e) => {e.preventDefault(); setAriaZona(!ariaZona)}} href="" ><i className="fa fa-yelp"/> <span className="nav-label" >Zonas</span><span className="fa arrow"/></a>
+                        <ul aria-expanded={ariaZona} className={`nav nav-second-level collapse ${ariaZona ? 'in' : ''}`}>
                             <li><Link to="/zonas">Ver zonas<span className="label label-primary float-right">1</span></Link></li>
                         </ul>
                     </li>
-                    <li>
-                        <a href=""><i className="fa fa-envelope" /> <span className="nav-label">Campañas</span><span className="fa arrow" /></a>
-                        <ul className="nav nav-second-level collapse">
+                    <li className={`${ariaCampaña ? 'active' : ''}`}>
+                        <a href="" aria-expanded={ariaCampaña} onClick={(e) => {e.preventDefault(); setAriaCampaña(!ariaCampaña)}}><i className="fa fa-child" /> <span className="nav-label">Campañas</span><span className="fa arrow" /></a>
+                        <ul aria-expanded={ariaCampaña} className={`nav nav-second-level collapse ${ariaCampaña ? 'in' : ''}`}>
                             <li><Link to="/campañas/macro"><i className="fa fa-calendar-o" />Ver MacroCampañas</Link></li>
                             <li><Link to="/campañas/registro"><i className="fa fa-id-card-o"></i>Registrar Persona</Link></li>
                         </ul>
                     </li>
                     <li>
-                        <Link to="/cumpleaños"><i className="fa fa-birthday-cake"/>Zona Cumpleaños</Link>
+                        <Link to="/cumpleaños"><i className="fa fa-birthday-cake"/><span className="nav-label">Zona Cumpleaños</span></Link>
                     </li>
                     <li>
-                        <Link to="/registrar/usuario"><i className="fa fa-user-circle-o"/>Registrar Usuario</Link>
+                        <Link to="/registrar/usuario"><i className="fa fa-user-circle-o"/><span className="nav-label">Registrar Usuario</span></Link>
+                    </li>
+                    <li>
+                        <Link to="/reporte"><i className="fa fa-bar-chart-o"/><span className="nav-label">Reportes</span></Link>
                     </li>
 
                     {/* <li>

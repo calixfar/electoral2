@@ -18,15 +18,13 @@ export const Perfil = (props) => {
                         {({ loading, error, data }) => {
                             if (loading) return <Spinner />
                             if (error) return `Error: ${error.message}`
-                            console.log(data)
                             const fechaCumple = new Date(Number(data.obtenerPersona.fechaCumple))
                             const dia = fechaCumple.getDate()
                             const mes = fechaCumple.getMonth() < 10 ? `0${fechaCumple.getMonth()}` : fechaCumple.getMonth()
                             const año = fechaCumple.getFullYear()
                             
                             data.obtenerPersona.fechaCumple = `${año}-${mes}-${dia}`;
-                            console.log(dia,mes,año)
-                            console.log(data.obtenerPersona.fechaCumple, 'fecha')
+                            console.log(data.obtenerPersona, 'superior')
                             return (
                                 <div className="row">
                                     <div className="col-md-4">
@@ -44,7 +42,7 @@ export const Perfil = (props) => {
                                     <div className="col-md-8">
                                         <div className="ibox">
                                             <div className="ibox-title">
-                                                <h5>Nombre</h5>
+                                                <h5>Datos de {data.obtenerPersona.nombre}</h5>
                                             </div>
                                             <div className="ibox-content">
                                                 <FormEditPerfil data={data.obtenerPersona} />
@@ -58,7 +56,7 @@ export const Perfil = (props) => {
             </Fragment>
         )
     }
-
+    console.log(props, 'props vaci')
     return (
         <Fragment>
             <TitleContent title={`Perfil de ${props.match.params.nombre}`} subtitle="editar perfil" />
