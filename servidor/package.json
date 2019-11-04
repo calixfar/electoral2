@@ -20,7 +20,7 @@
     "graphql-tools": "^4.0.4",
     "http-link": "^0.3.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.5.9",
+    "mongoose": "^5.7.5",
     "nodemon": "^1.19.0",
     "twilio": "^3.32.0"
   },
