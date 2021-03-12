@@ -10,7 +10,7 @@
     "graphql": "^14.3.0",
     "graphql-tag": "^2.10.1",
     "html2pdf.js": "^0.9.1",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "memoize-one": "^5.0.4",
     "react": "^16.8.6",
     "react-apollo": "^2.5.5",
